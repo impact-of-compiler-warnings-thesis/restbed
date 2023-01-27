@@ -21,13 +21,15 @@ jobs:
       - name: Install system dependencies
         run: |
           sudo apt update
-          sudo apt install ninja-build openssl
+          sudo apt install ninja-build openssl catch2
       - name: Generate build files
         run: |
           mkdir build && cd build
           cmake .. -GNinja \
                    -DCMAKE_BUILD_TYPE=Debug \
-                   -DBUILD_SSL=NO
+                   -DCMAKE_PREFIX_PATH=${{github.workspace}}/dependency \
+                   -DBUILD_SSL=OFF \
+                   -DBUILD_TESTS=ON
       - name: Run build-wrapper
         run: |
           build-wrapper-linux-x86-64 --out-dir ${{ env.BUILD_WRAPPER_OUT_DIR }} ninja -C build
